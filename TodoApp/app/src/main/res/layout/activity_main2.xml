@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2">
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/titles"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="100dp"
+            android:background="#F3C5C5"
+            android:ems="10"
+            android:hint="@string/title"
+            android:inputType="textLongMessage" />
+
+        <EditText
+            android:id="@+id/detail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/titles"
+            android:hint="@string/detail"
+            android:inputType="textLongMessage" />
+
+        <Spinner
+            android:id="@+id/tags"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/detail"
+            android:background="#F3C5C5"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:id="@+id/ddl"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/tags"
+            android:hint="@string/deadline"
+            android:inputType="textLongMessage" />
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#F3C5C5"
+            android:text="Remind me?" />
+
+        <EditText
+            android:id="@+id/dtr"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/detail"
+            android:hint="@string/remindday"
+            android:inputType="textLongMessage" />
+
+
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@id/layout"
+        android:background="@android:color/darker_gray"
+        android:onClick="Cancel"
+        android:text="CANCEL"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@id/layout"
+        android:layout_alignRight="@id/layout"
+        android:background="#F3C5C5"
+        android:onClick="Save"
+        android:text="SAVE"
+        android:textAlignment="center" />
+</RelativeLayout>
