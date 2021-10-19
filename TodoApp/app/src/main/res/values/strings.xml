@@ -5,4 +5,5 @@
     <string name="detail">please enter the detail of your task</string>
     <string name="deadline">please enter the deadline of yout task</string>
     <string name="remindday">day to remind me</string>
+    <string name="fulltitle"> </string>
 </resources>

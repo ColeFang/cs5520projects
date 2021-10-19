@@ -1,6 +1,7 @@
 package com.example.todoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import com.example.todoapp.data.Task;
 
 public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     public EditText mTitle;
@@ -28,20 +29,19 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     public CheckBox mCheck;
     public Task task;
     public static final String LOG_TAG = MainActivity2.class.getSimpleName();
-    public int ind;
     String[] tags = new String[]{"courses","coding","contest","resume","interview","exam"};
-    public static final String EXTRA_TASK ="Task";
-    public static final String EXTRA_IND ="Ind";
+    private TaskViewModel mTaskViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         Intent intent = getIntent();
-        task = intent.getParcelableExtra(MainActivity.EXTRA_TASK);
-        ind = intent.getIntExtra(MainActivity.EXTRA_IND,0);
+        String ind = intent.getStringExtra("IND");
 
+        mTaskViewModel.getTask(ind);
         mTitle = findViewById(R.id.titles);
         mDetail = findViewById(R.id.detail);
         mDdl = findViewById(R.id.ddl);
@@ -52,14 +52,22 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTag.setAdapter(aa);
         mCheck = findViewById(R.id.checkBox1);
-
-        mTitle.setText(task.getTitle());
-        mDetail.setText(task.getDetail());
-        mDdl.setText(task.getDdl());
-        mDtr.setText(task.getDtr());
-        mCheck.setChecked(task.isIfRemind());
-        mTag.setSelection(task.getTags());
-
+        mTaskViewModel.getTask(ind).observe(this, tasks -> {
+            mTitle.setText(tasks.getTitle());
+            mDetail.setText(tasks.getDetail());
+            mDdl.setText(tasks.getDdl());
+            mDtr.setText(tasks.getDtr());
+            mCheck.setChecked(tasks.isIfRemind());
+            mTag.setSelection(tasks.getTags());
+        });
+        mTaskViewModel.getTask(ind);
+        task=new Task();
+        task.setDdl(String.valueOf(mDdl.getText()));
+        task.setTitle(String.valueOf(mTitle.getText()));
+        task.setTags(Arrays.binarySearch(tags, String.valueOf(mTag.getSelectedItem())));
+        task.setDetail(String.valueOf(mDetail.getText()));
+        task.setDtr(String.valueOf(mDtr.getText()));
+        task.setIfRemind(mCheck.isChecked());
     }
 
 
@@ -92,8 +100,8 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         newTask.setIfRemind(mCheck.isChecked());
         Log.d(LOG_TAG, "Save Edit");
         Intent replyIntent = new Intent();
-        replyIntent.putExtra(EXTRA_TASK, newTask);
-        replyIntent.putExtra(EXTRA_IND, ind);
+        mTaskViewModel.deleteTodo(task);
+        mTaskViewModel.createTodo(newTask);
         setResult(1,replyIntent);
         finish();
     }

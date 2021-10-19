@@ -1,6 +1,7 @@
 package com.example.todoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.example.todoapp.data.Task;
 
 
 public class MainActivity3 extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -26,10 +28,11 @@ public class MainActivity3 extends AppCompatActivity implements AdapterView.OnIt
     public EditText mDtr;
     public Spinner mTag;
     public CheckBox mCheck;
-    public Task newTask = new Task();
+    public Task newTask=new Task();
     public static final String LOG_TAG = MainActivity2.class.getSimpleName();
     String[] tags = new String[]{"courses","coding","contest","resume","interview","exam"};
     public static final String EXTRA_TASK ="Task";
+    private TaskViewModel mTaskViewModel;
 
 
     @Override
@@ -47,6 +50,7 @@ public class MainActivity3 extends AppCompatActivity implements AdapterView.OnIt
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTag.setAdapter(aa);
         mCheck = findViewById(R.id.checkBox1);
+        mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
     }
 
@@ -78,8 +82,8 @@ public class MainActivity3 extends AppCompatActivity implements AdapterView.OnIt
         newTask.setDtr(String.valueOf(mDtr.getText()));
         newTask.setIfRemind(mCheck.isChecked());
         Log.d(LOG_TAG, "Save Edit");
+        mTaskViewModel.createTodo(newTask);
         Intent replyIntent = new Intent();
-        replyIntent.putExtra(EXTRA_TASK, newTask);
         setResult(2,replyIntent);
         finish();
     }
