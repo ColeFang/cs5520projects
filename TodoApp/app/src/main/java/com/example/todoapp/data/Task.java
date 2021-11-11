@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Calendar;
+
 @Entity(tableName = "tasks")
 public class Task {
     @PrimaryKey
@@ -12,12 +14,10 @@ public class Task {
     private String detail;
     private int tags;
     private String ddl;
-    private String dtr;
     private boolean ifRemind;
-    public Task(int id,String detail, int tags, String title, String ddl, String dtr, boolean ifRemind){
+    public Task(int id,String detail, int tags, String title, String ddl, boolean ifRemind){
         this.detail=detail;
         this.ddl=ddl;
-        this.dtr=dtr;
         this.tags=tags;
         this.ifRemind=ifRemind;
         this.title=title;
@@ -36,9 +36,6 @@ public class Task {
         this.ifRemind = ifRemind;
     }
 
-    public void setDtr(String dtr) {
-        this.dtr = dtr;
-    }
 
     public void setDetail(String detail) {
         this.detail = detail;
@@ -52,9 +49,6 @@ public class Task {
         return title;
     }
 
-    public String getDtr() {
-        return dtr;
-    }
 
     public String getDetail() {
         return detail;
@@ -67,7 +61,6 @@ public class Task {
     public boolean isIfRemind() {
         return ifRemind;
     }
-
 
     public int getTags() {
         return tags;

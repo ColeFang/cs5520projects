@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.todoapp.data.Task;
 
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
@@ -33,8 +34,8 @@ public class TaskItemRepository implements Iterable<Task>{
         return singleton;
     }
     public void createFakeData() {
-        addToDo(new Task(1,"do something, already",3,"Task todo 1","","",true ));
-        addToDo(new Task(2,"and another thign!",0, "Task todo 2","","",false ));
+        addToDo(new Task(1,"do something, already",3,"Task todo 1","",true ));
+        addToDo(new Task(2,"and another thign!",0, "Task todo 2","",false ));
     }
 
 

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity3">
 
     <LinearLayout
@@ -52,13 +53,15 @@
             android:background="#F3C5C5"
             android:text="Remind me?" />
 
-        <EditText
+        <Button
             android:id="@+id/dtr"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@id/detail"
-            android:hint="@string/remindday"
-            android:inputType="textLongMessage" />
+            android:background="#FFFFFF"
+            android:backgroundTint="#F89B9B"
+            android:text="@string/remindday"
+            app:iconTint="#F8F0F0" />
 
 
 

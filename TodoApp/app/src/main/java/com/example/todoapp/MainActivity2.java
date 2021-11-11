@@ -1,30 +1,39 @@
 package com.example.todoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import com.example.todoapp.data.Task;
 
-public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    public EditText mTitle;
+public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener{
+    public TextView mTitle;
     public EditText mDetail;
     public EditText mDdl;
-    public EditText mDtr;
+    public Button mDtr;
     public Spinner mTag;
     public CheckBox mCheck;
     public Task task;
@@ -56,7 +65,6 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
             mTitle.setText(tasks.getTitle());
             mDetail.setText(tasks.getDetail());
             mDdl.setText(tasks.getDdl());
-            mDtr.setText(tasks.getDtr());
             mCheck.setChecked(tasks.isIfRemind());
             mTag.setSelection(tasks.getTags());
         });
@@ -66,28 +74,62 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         task.setTitle(String.valueOf(mTitle.getText()));
         task.setTags(Arrays.binarySearch(tags, String.valueOf(mTag.getSelectedItem())));
         task.setDetail(String.valueOf(mDetail.getText()));
-        task.setDtr(String.valueOf(mDtr.getText()));
         task.setIfRemind(mCheck.isChecked());
+        mDtr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment timePicker = new TimePicker();
+                timePicker.show(getSupportFragmentManager(), "time picker");
+            }
+        });
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Toast.makeText(getApplicationContext(), tags[i], Toast.LENGTH_LONG).show();
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
 // TODO Auto-generated method stub
 
     }
+    @Override
+    public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, 0);
+        updateTimeText(c);
+        startAlarm(c);
+    }
     public void Cancel(View view) {
-        mTitle.setText("");
         mDetail.setText("");
         mDdl.setText("");
-        mDtr.setText("");
         mTag.setSelection(0);
         mCheck.setChecked(false);
+        cancelAlarm();
+    }
+
+    private void updateTimeText(Calendar c) {
+        String timeText = "Alarm set for: ";
+        timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
+    }
+    private void startAlarm(Calendar c) {
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        String title=this.task.getTitle();
+        intent.putExtra("title",title);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        if (c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1);
+        }
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+    }
+    private void cancelAlarm() {
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        alarmManager.cancel(pendingIntent);
     }
 
     public void Save(View view) {
@@ -96,7 +138,6 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         newTask.setTitle(String.valueOf(mTitle.getText()));
         newTask.setTags(Arrays.binarySearch(tags, String.valueOf(mTag.getSelectedItem())));
         newTask.setDetail(String.valueOf(mDetail.getText()));
-        newTask.setDtr(String.valueOf(mDtr.getText()));
         newTask.setIfRemind(mCheck.isChecked());
         Log.d(LOG_TAG, "Save Edit");
         Intent replyIntent = new Intent();
@@ -105,5 +146,4 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         setResult(1,replyIntent);
         finish();
     }
-
 }

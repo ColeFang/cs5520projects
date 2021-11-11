@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,15 +12,15 @@
         android:layout_height="550dp"
         android:orientation="vertical">
 
-        <EditText
+        <TextView
             android:id="@+id/titles"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="100dp"
             android:background="#F3C5C5"
             android:ems="10"
-            android:hint="@string/title"
-            android:inputType="textLongMessage" />
+            android:textColor="#0B0A0A"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/detail"
@@ -52,13 +53,16 @@
             android:background="#F3C5C5"
             android:text="Remind me?" />
 
-        <EditText
+        <Button
             android:id="@+id/dtr"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@id/detail"
-            android:hint="@string/remindday"
-            android:inputType="textLongMessage" />
+            android:background="#FFFFFF"
+            android:backgroundTint="#F89B9B"
+            android:text="@string/remindday"
+            app:iconTint="#F8F0F0" />
+
 
 
 
@@ -71,6 +75,7 @@
         android:layout_height="60dp"
         android:layout_below="@id/layout"
         android:background="@android:color/darker_gray"
+        android:backgroundTint="#F4B8B8"
         android:onClick="Cancel"
         android:text="CANCEL"
         android:textAlignment="center" />
@@ -81,7 +86,8 @@
         android:layout_height="60dp"
         android:layout_below="@id/layout"
         android:layout_alignRight="@id/layout"
-        android:background="#F3C5C5"
+        android:background="#ECB8B8"
+        android:backgroundTint="#E6A7A7"
         android:onClick="Save"
         android:text="SAVE"
         android:textAlignment="center" />

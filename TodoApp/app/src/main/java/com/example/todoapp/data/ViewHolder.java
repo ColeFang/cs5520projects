@@ -32,7 +32,7 @@ class ViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Task task) {
         this.task=task;
-        textView.setText(task.getTitle()+":      "+task.getDetail());
+        textView.setText(task.getTitle()+"\n"+task.getDdl());
     }
     static ViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())

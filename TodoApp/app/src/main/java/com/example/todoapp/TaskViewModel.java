@@ -27,7 +27,6 @@ public class TaskViewModel extends AndroidViewModel {
         mAllToDos = repository.getAllTasks();
         todoCreated.setValue(Boolean.FALSE);
     }
-
     public LiveData<Boolean> getTodoCreated() {
         return todoCreated;
     }

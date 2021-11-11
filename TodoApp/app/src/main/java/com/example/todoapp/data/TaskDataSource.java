@@ -34,5 +34,4 @@ public class TaskDataSource{
     public LiveData<List<Task>> getTasks() {
         return mTaskDataDao.loadAll();
     }
-
 }
