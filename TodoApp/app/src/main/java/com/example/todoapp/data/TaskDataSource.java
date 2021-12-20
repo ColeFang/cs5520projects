@@ -30,8 +30,9 @@ public class TaskDataSource{
         });
 
     }
-    public LiveData<Task> getTask(String title){return mTaskDataDao.loadTask(title);}
+    public LiveData<Task> getTask(int id){return mTaskDataDao.loadTask(id);}
     public LiveData<List<Task>> getTasks() {
         return mTaskDataDao.loadAll();
     }
+
 }

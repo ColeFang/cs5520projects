@@ -1,30 +1,20 @@
 package com.example.todoapp.data;
-import android.content.Intent;
-import android.graphics.Color;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.os.Bundle;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.todoapp.MainActivity;
-import com.example.todoapp.MainActivity2;
-import com.example.todoapp.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.view.LayoutInflater;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.example.todoapp.TaskViewModel;
 
 public class TaskRecyclerViewAdapter extends ListAdapter<Task, ViewHolder> {
+    private final TaskViewModel mTaskViewModel;
 
-    public TaskRecyclerViewAdapter(@NonNull DiffUtil.ItemCallback<Task> diffCallback) {
+    public TaskRecyclerViewAdapter(@NonNull DiffUtil.ItemCallback<Task> diffCallback, TaskViewModel mTaskViewModel) {
         super(diffCallback);
+        this.mTaskViewModel=mTaskViewModel;
     }
 
     @NonNull
@@ -36,7 +26,7 @@ public class TaskRecyclerViewAdapter extends ListAdapter<Task, ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Task current = getItem(position);
-        viewHolder.bind(current);
+        viewHolder.bind(current, mTaskViewModel);
     }
 
     public static class TodoDiff extends DiffUtil.ItemCallback<Task> {

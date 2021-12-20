@@ -20,6 +20,7 @@ public interface TaskDataDao {
     LiveData<List<Task>> loadAll();
     @Query("DELETE FROM tasks")
     public void deleteAll();
-    @Query("SELECT * FROM tasks WHERE title==:taskTitle")
-    public LiveData<Task> loadTask(String taskTitle);
+    @Query("SELECT * FROM tasks WHERE id==:taskID")
+    public LiveData<Task> loadTask(int taskID);
+
 }

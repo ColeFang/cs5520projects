@@ -23,22 +23,24 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import com.example.todoapp.data.Task;
-
+import java.util.Random;
 public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePickerDialog.OnTimeSetListener{
-    public TextView mTitle;
+    public EditText mTitle;
     public EditText mDetail;
-    public EditText mDdl;
+    public TextView mDdl;
     public Button mDtr;
     public Spinner mTag;
-    public CheckBox mCheck;
     public Task task;
+    private int ind;
+    private boolean isAlarm = false;
     public static final String LOG_TAG = MainActivity2.class.getSimpleName();
-    String[] tags = new String[]{"courses","coding","contest","resume","interview","exam"};
+    String[] tags = new String[]{"reading","coding","meeting","presentation","exam"};
     private TaskViewModel mTaskViewModel;
 
 
@@ -48,8 +50,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_main2);
         mTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         Intent intent = getIntent();
-        String ind = intent.getStringExtra("IND");
-
+        ind = intent.getIntExtra("IND",0);
         mTaskViewModel.getTask(ind);
         mTitle = findViewById(R.id.titles);
         mDetail = findViewById(R.id.detail);
@@ -60,12 +61,10 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,tags);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTag.setAdapter(aa);
-        mCheck = findViewById(R.id.checkBox1);
         mTaskViewModel.getTask(ind).observe(this, tasks -> {
             mTitle.setText(tasks.getTitle());
             mDetail.setText(tasks.getDetail());
             mDdl.setText(tasks.getDdl());
-            mCheck.setChecked(tasks.isIfRemind());
             mTag.setSelection(tasks.getTags());
         });
         mTaskViewModel.getTask(ind);
@@ -74,12 +73,11 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         task.setTitle(String.valueOf(mTitle.getText()));
         task.setTags(Arrays.binarySearch(tags, String.valueOf(mTag.getSelectedItem())));
         task.setDetail(String.valueOf(mDetail.getText()));
-        task.setIfRemind(mCheck.isChecked());
-        mDtr.setOnClickListener(new View.OnClickListener() {
+        mDdl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment timePicker = new TimePicker();
-                timePicker.show(getSupportFragmentManager(), "time picker");
+                timePicker.show(getSupportFragmentManager(), "time picker1");
             }
         });
     }
@@ -99,27 +97,28 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
         c.set(Calendar.SECOND, 0);
-        updateTimeText(c);
-        startAlarm(c);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd   HH:mm:ss");
+        if (isAlarm){
+            startAlarm(c);
+            this.isAlarm=false;
+        }
+        else {
+            mDdl.setText(formatter.format(c.getTime()));
+        }
     }
     public void Cancel(View view) {
         mDetail.setText("");
         mDdl.setText("");
         mTag.setSelection(0);
-        mCheck.setChecked(false);
         cancelAlarm();
     }
 
-    private void updateTimeText(Calendar c) {
-        String timeText = "Alarm set for: ";
-        timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
-    }
     private void startAlarm(Calendar c) {
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        String title=this.task.getTitle();
-        intent.putExtra("title",title);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        intent.putExtra("TITLE",this.task.getTitle());
+        intent.putExtra("IND",this.ind);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ind, intent, 0);
         if (c.before(Calendar.getInstance())) {
             c.add(Calendar.DATE, 1);
         }
@@ -128,7 +127,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     private void cancelAlarm() {
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ind, intent, 0);
         alarmManager.cancel(pendingIntent);
     }
 
@@ -138,12 +137,18 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         newTask.setTitle(String.valueOf(mTitle.getText()));
         newTask.setTags(Arrays.binarySearch(tags, String.valueOf(mTag.getSelectedItem())));
         newTask.setDetail(String.valueOf(mDetail.getText()));
-        newTask.setIfRemind(mCheck.isChecked());
+        newTask.setId(ind);
         Log.d(LOG_TAG, "Save Edit");
-        Intent replyIntent = new Intent();
+        Intent replyIntent = new Intent(view.getContext(), MainActivity.class);
         mTaskViewModel.deleteTodo(task);
         mTaskViewModel.createTodo(newTask);
-        setResult(1,replyIntent);
-        finish();
+        startActivity(replyIntent);
+    }
+
+    public void AddAlarm(View view) {
+        this.isAlarm=true;
+        DialogFragment timePicker = new TimePicker();
+        timePicker.show(getSupportFragmentManager(), "time picker");
+
     }
 }

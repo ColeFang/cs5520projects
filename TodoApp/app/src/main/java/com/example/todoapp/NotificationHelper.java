@@ -13,15 +13,20 @@ import androidx.core.app.NotificationCompat;
 public class NotificationHelper extends ContextWrapper {
     public static final String channelID = "channelID";
     public static final String channelName = "Channel Name";
+    public String task="";
+    public int ind;
 
     private NotificationManager mManager;
 
-    public NotificationHelper(Context base) {
+    public NotificationHelper(Context base, String task, int ind) {
         super(base);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
         }
+        this.ind=ind;
+        this.task=task;
     }
+    
 
     @TargetApi(Build.VERSION_CODES.O)
     private void createChannel() {
@@ -34,14 +39,13 @@ public class NotificationHelper extends ContextWrapper {
         if (mManager == null) {
             mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
-
         return mManager;
     }
 
-    public NotificationCompat.Builder getChannelNotification(String task) {
+    public NotificationCompat.Builder getChannelNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle("Alarm!")
-                .setContentText("Your task: "+ task +"is close to the deadline.")
-                .setSmallIcon(R.drawable.ic_launcher_background);
+                .setContentText("Your task: "+ task +" is close to the deadline.")
+                .setSmallIcon(R.drawable.icon);
     }
 }

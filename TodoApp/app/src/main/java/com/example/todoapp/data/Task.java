@@ -14,15 +14,23 @@ public class Task {
     private String detail;
     private int tags;
     private String ddl;
-    private boolean ifRemind;
-    public Task(int id,String detail, int tags, String title, String ddl, boolean ifRemind){
+    private int id;
+    public Task(int id,String detail, int tags, String title, String ddl){
         this.detail=detail;
         this.ddl=ddl;
         this.tags=tags;
-        this.ifRemind=ifRemind;
         this.title=title;
+        this.id=id;
     }
     public Task(){};
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -32,9 +40,6 @@ public class Task {
         this.tags = tags;
     }
 
-    public void setIfRemind(boolean ifRemind) {
-        this.ifRemind = ifRemind;
-    }
 
 
     public void setDetail(String detail) {
@@ -58,9 +63,6 @@ public class Task {
         return ddl;
     }
 
-    public boolean isIfRemind() {
-        return ifRemind;
-    }
 
     public int getTags() {
         return tags;

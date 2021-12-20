@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">Task List</string>
     <string name="editText_main">title</string>
-    <string name="title">please enter the title of your task</string>
-    <string name="detail">please enter the detail of your task</string>
-    <string name="deadline">please enter the deadline of yout task</string>
-    <string name="remindday">day to remind me</string>
+    <string name="title">Title</string>
+    <string name="detail">Detail</string>
+    <string name="deadline">Deadline</string>
     <string name="fulltitle"> </string>
 </resources>

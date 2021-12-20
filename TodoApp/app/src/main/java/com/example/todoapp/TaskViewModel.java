@@ -20,10 +20,10 @@ public class TaskViewModel extends AndroidViewModel {
 
     private final LiveData<List<Task>> mAllToDos;
 
+
     public TaskViewModel(Application application) {
         super(application);
         repository = TaskItemRepository.getSingleton(application);
-        repository.createFakeData();
         mAllToDos = repository.getAllTasks();
         todoCreated.setValue(Boolean.FALSE);
     }
@@ -39,8 +39,8 @@ public class TaskViewModel extends AndroidViewModel {
         repository.delToDo(task);
         todoCreated.setValue(Boolean.FALSE);
     }
-    public LiveData<Task> getTask(String title){
-        return repository.getTask(title);
+    public LiveData<Task> getTask(int id){
+        return repository.getTask(id);
     }
 
     public LiveData<List<Task>> getAllToDos() {
